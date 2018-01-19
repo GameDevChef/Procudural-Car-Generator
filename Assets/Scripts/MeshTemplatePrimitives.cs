@@ -6,123 +6,122 @@ using System.Linq;
 public class MeshTemplatePrimitives
 {
 
-    public static MeshTemplate Triangle(Vector3 v0, Vector3 v1, Vector3 v2)
+    public static MeshTemplate Triangle(Vector3 _v0, Vector3 _v1, Vector3 _v2)
     {
-        Vector3 normal = normal = Vector3.Cross((v1 - v0), (v2 - v0)).normalized;
+        Vector3 normal = Vector3.Cross((_v1 - _v0), (_v2 - _v0)).normalized;
         return new MeshTemplate
         {
-
-            vertices = new List<Vector3>(3) { v0, v1, v2 },
-            normals = new List<Vector3>(3) { normal, normal, normal },
-            uv = new List<Vector2>(3) { new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1) },
-            triangles = new List<int>(3) { 0, 1, 2 },
-            name = "Triangle"
+            m_Vertices = new List<Vector3>(3) { _v0, _v1, _v2 },
+            m_Normals = new List<Vector3>(3) { normal, normal, normal },
+            m_UVs = new List<Vector2>(3) { new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1) },
+            m_Triangles = new List<int>(3) { 0, 1, 2 },
+            m_Name = "Triangle"
         };
     }
 
-    public static MeshTemplate Quad(Vector3 origin, Vector3 width, Vector3 length)
+    public static MeshTemplate Quad(Vector3 _origin, Vector3 _width, Vector3 _length)
     {
-        Vector3 normal = Vector3.Cross(length, width).normalized;
+        Vector3 normal = Vector3.Cross(_length, _width).normalized;
         return new MeshTemplate
         {
-            vertices = new List<Vector3>(4) { origin, origin + length, origin + length + width, origin + width },
-            normals = new List<Vector3>(4) { normal, normal, normal, normal },
-            uv = new List<Vector2>(4) { new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0) },
-            triangles = new List<int>(6) { 0, 1, 2, 0, 2, 3 },
-            name = "Quad"
+            m_Vertices = new List<Vector3>(4) { _origin, _origin + _length, _origin + _length + _width, _origin + _width },
+            m_Normals = new List<Vector3>(4) { normal, normal, normal, normal },
+            m_UVs = new List<Vector2>(4) { new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0) },
+            m_Triangles = new List<int>(6) { 0, 1, 2, 0, 2, 3 },
+            m_Name = "Quad"
         };
     }
 
-    public static MeshTemplate Quad(Vector3 vertex0, Vector3 vertex1, Vector3 vertex2, Vector3 vertex3)
+    public static MeshTemplate Quad(Vector3 _vertex0, Vector3 _vertex1, Vector3 _vertex2, Vector3 _vertex3)
     {
-        var normal = Vector3.Cross((vertex1 - vertex0), (vertex2 - vertex0)).normalized;
+        Vector3 normal = Vector3.Cross((_vertex1 - _vertex0), (_vertex2 - _vertex0)).normalized;
         return new MeshTemplate
         {
-            vertices = new List<Vector3>(4) { vertex0, vertex1, vertex2, vertex3 },
-            normals = new List<Vector3>(4) { normal, normal, normal, normal },
-            uv = new List<Vector2>(4) { new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0) },
-            triangles = new List<int>(6) { 0, 1, 2, 0, 2, 3 },
-            name = "Quad"
+            m_Vertices = new List<Vector3>(4) { _vertex0, _vertex1, _vertex2, _vertex3 },
+            m_Normals = new List<Vector3>(4) { normal, normal, normal, normal },
+            m_UVs = new List<Vector2>(4) { new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0) },
+            m_Triangles = new List<int>(6) { 0, 1, 2, 0, 2, 3 },
+            m_Name = "Quad"
         };
     }
 
-    public static MeshTemplate TriangleStrip(List<Vector3> verticesList)
-    {
-        var template = new MeshTemplate
-        {
-            vertices = verticesList,
-            triangles = new List<int>(verticesList.Count - 2),
-            normals = new List<Vector3>(verticesList.Count),
-            uv = new List<Vector2>(verticesList.Count),
-            name = "TriangleStrip"
-        };
-        for (int i = 0, j = 1, k = 2; i < verticesList.Count - 2; i++, j += i % 2 * 2, k += (i + 1) % 2 * 2)
-        {
-            template.triangles.Add(i);
-            template.triangles.Add(j);
-            template.triangles.Add(k);
-
-        }
-        var normal = Vector3.Cross(verticesList[1] - verticesList[0], verticesList[2] - verticesList[0]).normalized;
-        for (int i = 0; i < verticesList.Count; i++)
-        {
-            template.normals.Add(normal);
-            template.uv.Add(new Vector2((float)i / verticesList.Count, (float)i / verticesList.Count));
-        }
-
-        return template;
-    }
-
-    public static MeshTemplate TriangleFan(List<Vector3> verticesList)
+    public static MeshTemplate TriangleStrip(List<Vector3> _verticesList)
     {
         MeshTemplate template = new MeshTemplate
         {
-            vertices = verticesList,
-            triangles = new List<int>(verticesList.Count - 2),
-            normals = new List<Vector3>(verticesList.Count),
-            uv = new List<Vector2>(verticesList.Count),
-            name = "Triangle Fan"
-
+            m_Vertices = _verticesList,
+            m_Triangles = new List<int>(_verticesList.Count - 2),
+            m_Normals = new List<Vector3>(_verticesList.Count),
+            m_UVs = new List<Vector2>(_verticesList.Count),
+            m_Name = "TriangleStrip"
         };
 
-        for (int i = 1; i < verticesList.Count - 1; i++)
+        for (int i = 0, j = 1, k = 2; i < _verticesList.Count - 2; i++, j += i % 2 * 2, k += (i + 1) % 2 * 2)
         {
-            template.triangles.Add(0);
-            template.triangles.Add(i);
-            template.triangles.Add(i + 1);
+            template.m_Triangles.Add(i);
+            template.m_Triangles.Add(j);
+            template.m_Triangles.Add(k);
         }
 
-        var normal = Vector3.Cross(verticesList[1] - verticesList[0], verticesList[2] - verticesList[0]).normalized;
-
-        for (int i = 0; i < verticesList.Count; i++)
+        Vector3 normal = Vector3.Cross(_verticesList[1] - _verticesList[0], _verticesList[2] - _verticesList[0]).normalized;
+        for (int i = 0; i < _verticesList.Count; i++)
         {
-            template.normals.Add(normal);
-            template.uv.Add(new Vector2((float)i / verticesList.Count, (float)i / verticesList.Count));
+            template.m_Normals.Add(normal);
+            template.m_UVs.Add(new Vector2((float)i / _verticesList.Count, (float)i / _verticesList.Count));
         }
 
         return template;
     }
 
-    public static MeshTemplate BaselessPyramid(Vector3 baseCenter, Vector3 apex, float radius, int segments,
-        bool inverted = false)
+    public static MeshTemplate TriangleFan(List<Vector3> _verticesList)
     {
-        float segmentAngle = 360f / segments * (inverted ? -1 : 1);
+        MeshTemplate template = new MeshTemplate
+        {
+            m_Vertices = _verticesList,
+            m_Triangles = new List<int>(_verticesList.Count - 2),
+            m_Normals = new List<Vector3>(_verticesList.Count),
+            m_UVs = new List<Vector2>(_verticesList.Count),
+            m_Name = "Triangle Fan"
+
+        };
+
+        for (int i = 1; i < _verticesList.Count - 1; i++)
+        {
+            template.m_Triangles.Add(0);
+            template.m_Triangles.Add(i);
+            template.m_Triangles.Add(i + 1);
+        }
+
+        Vector3 normal = Vector3.Cross(_verticesList[1] - _verticesList[0], _verticesList[2] - _verticesList[0]).normalized;
+
+        for (int i = 0; i < _verticesList.Count; i++)
+        {
+            template.m_Normals.Add(normal);
+            template.m_UVs.Add(new Vector2((float)i / _verticesList.Count, (float)i / _verticesList.Count));
+        }
+
+        return template;
+    }
+
+    public static MeshTemplate BaselessPyramid(Vector3 _baseCenter, Vector3 _apex, float _radius, int _segments, bool _inverted = false)
+    {
+        float segmentAngle = 360f / _segments * (_inverted ? -1 : 1);
         float currentAngle = 0f;
 
-        Vector3[] verticesList = new Vector3[segments + 1];
-        verticesList[0] = apex;
+        Vector3[] verticesList = new Vector3[_segments + 1];
+        verticesList[0] = _apex;
 
-        for (int i = 1; i <= segments; i++)
+        for (int i = 1; i <= _segments; i++)
         {
-            verticesList[i] = Utility.PointOnCircle3XZ(radius, currentAngle) + baseCenter;
+            verticesList[i] = Utility.PointOnCircle3XZ(_radius, currentAngle) + _baseCenter;
             Debug.Log(verticesList[i]);
             currentAngle += segmentAngle;
         }
 
 
-        MeshTemplate template = new MeshTemplate { name = "Baseless Pyramid" };
+        MeshTemplate template = new MeshTemplate { m_Name = "Baseless Pyramid" };
 
-        for (int i = 1; i < segments; i++)
+        for (int i = 1; i < _segments; i++)
         {
             template.Add(Triangle(verticesList[0], verticesList[i], verticesList[i + 1]));
         }
@@ -131,155 +130,150 @@ public class MeshTemplatePrimitives
         return template;
     }
 
-    public static MeshTemplate BaselessPyramid(float radius, int segments, float heignt, bool inverted = false)
+    public static MeshTemplate BaselessPyramid(float _radius, int _segments, float _heignt, bool _inverted = false)
     {
-        return BaselessPyramid(Vector3.zero, Vector3.up * heignt * (inverted ? -1 : 1), radius, segments, inverted);
+        return BaselessPyramid(Vector3.zero, Vector3.up * _heignt * (_inverted ? -1 : 1), _radius, _segments, _inverted);
     }
 
-    public static MeshTemplate Band(List<Vector3> lowerRing, List<Vector3> upperRing)
+    public static MeshTemplate Band(List<Vector3> _lowerRing, List<Vector3> _upperRing)
     {
-        MeshTemplate template = new MeshTemplate { name = "Band" };
-        if (lowerRing.Count < 3 || upperRing.Count < 3)
+        MeshTemplate template = new MeshTemplate { m_Name = "Band" };
+        if (_lowerRing.Count < 3 || _upperRing.Count < 3)
         {
-            Debug.LogError("List must be grater then 2");
+            Debug.Log("List must be grater then 2");
             return template;
         }
-        if (lowerRing.Count != upperRing.Count)
+        if (_lowerRing.Count != _upperRing.Count)
         {
-            Debug.LogError("Lists must be equal");
+            Debug.Log("Lists must be equal");
             return template;
         }
-        template.vertices.AddRange(lowerRing);
-        template.vertices.AddRange(upperRing);
+        template.m_Vertices.AddRange(_lowerRing);
+        template.m_Vertices.AddRange(_upperRing);
 
         List<Vector3> lowerNormals = new List<Vector3>();
         List<Vector3> upperNormals = new List<Vector3>();
-        var lowerUv = new List<Vector2>();
-        var upperUv = new List<Vector2>();
+        List<Vector2> lowerUv = new List<Vector2>();
+        List<Vector2> upperUv = new List<Vector2>();
 
         int i0, i1, i2, i3;
         Vector3 v0, v1, v2, v3;
-        for (int i = 0; i < lowerRing.Count - 1; i++)
+        for (int i = 0; i < _lowerRing.Count - 1; i++)
         {
             i0 = i;
-            i1 = i + lowerRing.Count;
+            i1 = i + _lowerRing.Count;
             i2 = i + 1;
-            i3 = i + 1 + lowerRing.Count;
-            v0 = template.vertices[i0];
-            v1 = template.vertices[i1];
-            v2 = template.vertices[i2];
-            v3 = template.vertices[i3];
-            template.triangles.AddRange(new[] { i0, i1, i2 });
-            template.triangles.AddRange(new[] { i2, i1, i3 });
+            i3 = i + 1 + _lowerRing.Count;
+            v0 = template.m_Vertices[i0];
+            v1 = template.m_Vertices[i1];
+            v2 = template.m_Vertices[i2];
+            v3 = template.m_Vertices[i3];
+            template.m_Triangles.AddRange(new[] { i0, i1, i2 });
+            template.m_Triangles.AddRange(new[] { i2, i1, i3 });
 
             lowerNormals.Add(Vector3.Cross(v1 - v0, v2 - v0).normalized);
             upperNormals.Add(Vector3.Cross(v3 - v1, v0 - v1).normalized);
 
-            var u = (float)i / (lowerRing.Count - 1);
+            float u = (float)i / (_lowerRing.Count - 1);
             lowerUv.Add(new Vector2(u, 0));
             upperUv.Add(new Vector2(u, 1));
         }
-        i0 = lowerRing.Count - 1;
-        i1 = lowerRing.Count * 2 - 1;
+        i0 = _lowerRing.Count - 1;
+        i1 = _lowerRing.Count * 2 - 1;
         i2 = 0;
-        i3 = lowerRing.Count;
-        v0 = template.vertices[i0];
-        v1 = template.vertices[i1];
-        v2 = template.vertices[i2];
-        v3 = template.vertices[i3];
-        template.triangles.AddRange(new[] { i0, i1, i2 });
-        template.triangles.AddRange(new[] { i2, i1, i3 });
+        i3 = _lowerRing.Count;
+        v0 = template.m_Vertices[i0];
+        v1 = template.m_Vertices[i1];
+        v2 = template.m_Vertices[i2];
+        v3 = template.m_Vertices[i3];
+        template.m_Triangles.AddRange(new[] { i0, i1, i2 });
+        template.m_Triangles.AddRange(new[] { i2, i1, i3 });
 
         lowerNormals.Add(Vector3.Cross(v1 - v0, v2 - v0).normalized);
         upperNormals.Add(Vector3.Cross(v3 - v1, v0 - v1).normalized);
-        template.normals.AddRange(lowerNormals);
-        template.normals.AddRange(upperNormals);
+        template.m_Normals.AddRange(lowerNormals);
+        template.m_Normals.AddRange(upperNormals);
 
         lowerUv.Add(new Vector2(1, 0));
         upperUv.Add(new Vector2(1, 1));
-        template.uv.AddRange(lowerUv);
-        template.uv.AddRange(upperUv);
+        template.m_UVs.AddRange(lowerUv);
+        template.m_UVs.AddRange(upperUv);
 
         return template;
     }
 
-    public static MeshTemplate FlatBand(List<Vector3> lowerRing, List<Vector3> upperRing)
+    public static MeshTemplate FlatBand(List<Vector3> _lowerRing, List<Vector3> _upperRing)
     {
-        var draft = new MeshTemplate { name = "Flat band" };
-        if (lowerRing.Count < 3 || upperRing.Count < 3)
+        MeshTemplate draft = new MeshTemplate { m_Name = "Flat band" };
+        if (_lowerRing.Count < 3 || _upperRing.Count < 3)
         {
             Debug.LogError("Array sizes must be greater than 2");
             return draft;
         }
-        if (lowerRing.Count != upperRing.Count)
+        if (_lowerRing.Count != _upperRing.Count)
         {
             Debug.LogError("Array sizes must be equal");
             return draft;
         }
 
         Vector3 v0, v1, v2, v3;
-        for (int i = 0; i < lowerRing.Count - 1; i++)
+        for (int i = 0; i < _lowerRing.Count - 1; i++)
         {
-            v0 = lowerRing[i];
-            v1 = upperRing[i];
-            v2 = lowerRing[i + 1];
-            v3 = upperRing[i + 1];
+            v0 = _lowerRing[i];
+            v1 = _upperRing[i];
+            v2 = _lowerRing[i + 1];
+            v3 = _upperRing[i + 1];
             draft.Add(Triangle(v0, v1, v2));
             draft.Add(Triangle(v2, v1, v3));
         }
 
-        v0 = lowerRing[lowerRing.Count - 1];
-        v1 = upperRing[upperRing.Count - 1];
-        v2 = lowerRing[0];
-        v3 = upperRing[0];
+        v0 = _lowerRing[_lowerRing.Count - 1];
+        v1 = _upperRing[_upperRing.Count - 1];
+        v2 = _lowerRing[0];
+        v3 = _upperRing[0];
         draft.Add(Triangle(v0, v1, v2));
         draft.Add(Triangle(v2, v1, v3));
 
         return draft;
     }
 
-    public static MeshTemplate Pyramid(float radius, int segments, float heignt, bool inverted = false)
+    public static MeshTemplate Pyramid(float _radius, int _segments, float _heignt, bool _inverted = false)
     {
-        var draft = BaselessPyramid(radius, segments, heignt, inverted);
-        var vertices = new List<Vector3>(segments);
-        for (int i = draft.vertices.Count - 2; i >= 0; i -= 3)
+        MeshTemplate draft = BaselessPyramid(_radius, _segments, _heignt, _inverted);
+        List<Vector3> vertices = new List<Vector3>(_segments);
+        for (int i = draft.m_Vertices.Count - 2; i >= 0; i -= 3)
         {
-            vertices.Add(draft.vertices[i]);
+            vertices.Add(draft.m_Vertices[i]);
         }
         draft.Add(TriangleFan(vertices));
-        draft.name = "Pyramid";
+        draft.m_Name = "Pyramid";
         return draft;
     }
 
-    public static MeshTemplate Cylinder(Vector3 baseCenter, float radius, float height, int segments, bool inverted = false)
+    public static MeshTemplate Cylinder(Vector3 _baseCenter, float _radius, float _height, int _segments, bool _inverted = false)
     {
         {
-            float segmentAngle = 360f / segments;
+            float segmentAngle = 360f / _segments;
             float currentAngle = 0;
 
-            var lowerRing = new List<Vector3>(segments);
-            var upperRing = new List<Vector3>(segments);
-            for (var i = 0; i < segments; i++)
+            List<Vector3> lowerRing = new List<Vector3>(_segments);
+            List<Vector3> upperRing = new List<Vector3>(_segments);
+            for (int i = 0; i < _segments; i++)
             {
-                var point = Utility.PointOnCircle3YZ(radius, currentAngle);
-                lowerRing.Add(point + Vector3.right * height / 2 + baseCenter);
-                upperRing.Add(point - Vector3.right * height / 2 + baseCenter);
+                Vector3 point = Utility.PointOnCircle3YZ(_radius, currentAngle);
+                lowerRing.Add(point + Vector3.right * _height / 2 + _baseCenter);
+                upperRing.Add(point - Vector3.right * _height / 2 + _baseCenter);
                 currentAngle -= segmentAngle;
             }
 
-            var draft = TriangleFan(lowerRing);
+            MeshTemplate draft = TriangleFan(lowerRing);
             draft.Add(Band(lowerRing, upperRing));
             upperRing.Reverse();
             draft.Add(TriangleFan(upperRing));
-            draft.name = "Cylinder";
+            draft.m_Name = "Cylinder";
             return draft;
         }
-
-
-
-    }
-
- 
+    } 
 }
 
 

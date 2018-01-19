@@ -7,72 +7,70 @@ using System.Linq;
 public class MeshTemplate
 {
 
-    public string name = "";
-    public List<Vector3> vertices = new List<Vector3>();
-    public List<int> triangles = new List<int>();
-    public List<Vector3> normals = new List<Vector3>();
-    public List<Vector2> uv = new List<Vector2>();
-    public List<Color> colors = new List<Color>();
+    public string m_Name;
+    public List<Vector3> m_Vertices = new List<Vector3>();
+    public List<int> m_Triangles = new List<int>();
+    public List<Vector3> m_Normals = new List<Vector3>();
+    public List<Vector2> m_UVs = new List<Vector2>();
+    public List<Color> m_Colors = new List<Color>();
 
     public MeshTemplate()
     {
     }
 
-    public MeshTemplate(Mesh mesh)
+    public MeshTemplate(Mesh _mesh)
     {
-        name = mesh.name;
-        vertices.AddRange(mesh.vertices);
-        triangles.AddRange(mesh.triangles);
-        normals.AddRange(mesh.normals);
-        uv.AddRange(mesh.uv);
-        colors.AddRange(mesh.colors);
+        m_Name = _mesh.name;
+        m_Vertices.AddRange(_mesh.vertices);
+        m_Triangles.AddRange(_mesh.triangles);
+        m_Normals.AddRange(_mesh.normals);
+        m_UVs.AddRange(_mesh.uv);
+        m_Colors.AddRange(_mesh.colors);
     }
 
     public void Add(MeshTemplate template)
-    {
-        foreach (var triangle in template.triangles)
+    {        
+        for (int i = 0; i < template.m_Triangles.Count; i++)
         {
-            triangles.Add(triangle + vertices.Count);
+            m_Triangles.Add(template.m_Triangles[i] + m_Vertices.Count);
         }
-        vertices.AddRange(template.vertices);
-        normals.AddRange(template.normals);
-        uv.AddRange(template.uv);
-        colors.AddRange(template.colors);
+
+        m_Vertices.AddRange(template.m_Vertices);
+        m_Normals.AddRange(template.m_Normals);
+        m_UVs.AddRange(template.m_UVs);
+        m_Colors.AddRange(template.m_Colors);
     }
 
     public Mesh ToMesh()
     {
-        Mesh mesh = new Mesh { name = name };
-        mesh.SetVertices(vertices);
-        mesh.SetTriangles(triangles, 0);
-        mesh.SetNormals(normals);
-        mesh.SetUVs(0, uv);
-        mesh.SetColors(colors);
+        Mesh mesh = new Mesh { name = m_Name };
+        mesh.SetVertices(m_Vertices);
+        mesh.SetTriangles(m_Triangles, 0);
+        mesh.SetNormals(m_Normals);
+        mesh.SetUVs(0, m_UVs);
+        mesh.SetColors(m_Colors);
         mesh.RecalculateNormals();
         return mesh;
     }
 
     public void FlipTriangles()
     {
-
-        int[] triangles = this.triangles.ToArray();
+        int[] triangles = m_Triangles.ToArray();
         for (int j = 0; j < triangles.Length; j += 3)
         {
              Utility.Swap(ref triangles[j], ref triangles[j + 1]);
         }
-        this.triangles = triangles.ToList();
-
-
+        m_Triangles = triangles.ToList();
     }
 
     public void FlipNormals()
     {
-        var normals = this.normals;
+        List<Vector3> normals = m_Normals;
         for (int i = 0; i < normals.Count; i++)
         {
             normals[i] = -normals[i];
         }
-        this.normals = normals;
+        m_Normals = normals;
     }
 
     public void FlipFaces()

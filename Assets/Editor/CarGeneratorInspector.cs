@@ -6,11 +6,11 @@ using UnityEditor;
 [CustomEditor(typeof(CarGenerator))]
 public class CarGeneratorInspector : Editor {
 
-    CarGenerator carGenerator;
+    CarGenerator m_carGenerator;
 
     private void OnEnable()
     {
-        carGenerator = target as CarGenerator;
+        m_carGenerator = target as CarGenerator;
     }
 
     public override void OnInspectorGUI()
@@ -18,36 +18,34 @@ public class CarGeneratorInspector : Editor {
         EditorGUILayout.BeginVertical();
 
         EditorGUILayout.BeginHorizontal();
-        carGenerator.minX = EditorGUILayout.FloatField(carGenerator.minX);
-        carGenerator.maxX = EditorGUILayout.FloatField(carGenerator.maxX);
+        m_carGenerator.m_MinX = EditorGUILayout.FloatField(m_carGenerator.m_MinX);
+        m_carGenerator.m_MaxX = EditorGUILayout.FloatField(m_carGenerator.m_MaxX);
         EditorGUILayout.EndHorizontal();
-        EditorGUILayout.MinMaxSlider("X range", ref carGenerator.minX, ref carGenerator.maxX, 1, 4);
+        EditorGUILayout.MinMaxSlider("Width range", ref m_carGenerator.m_MinX, ref m_carGenerator.m_MaxX, 1, 4);
 
         EditorGUILayout.BeginHorizontal();
-        carGenerator.minY = EditorGUILayout.FloatField(carGenerator.minY);
-        carGenerator.maxY = EditorGUILayout.FloatField(carGenerator.maxY);
+        m_carGenerator.m_MinY = EditorGUILayout.FloatField(m_carGenerator.m_MinY);
+        m_carGenerator.m_MaxY = EditorGUILayout.FloatField(m_carGenerator.m_MaxY);
         EditorGUILayout.EndHorizontal();
-        EditorGUILayout.MinMaxSlider("Y range", ref carGenerator.minY, ref carGenerator.maxY, 1, 3);
+        EditorGUILayout.MinMaxSlider("Height range", ref m_carGenerator.m_MinY, ref m_carGenerator.m_MaxY, 1, 3);
 
         EditorGUILayout.BeginHorizontal();
-        carGenerator.minZ = EditorGUILayout.FloatField(carGenerator.minZ);
-        carGenerator.maxZ = EditorGUILayout.FloatField(carGenerator.maxZ);
+        m_carGenerator.m_MinZ = EditorGUILayout.FloatField(m_carGenerator.m_MinZ);
+        m_carGenerator.m_MaxZ = EditorGUILayout.FloatField(m_carGenerator.m_MaxZ);
         EditorGUILayout.EndHorizontal();
-        EditorGUILayout.MinMaxSlider("Z range", ref carGenerator.minZ, ref carGenerator.maxZ, 2, 8);
+        EditorGUILayout.MinMaxSlider("Length range", ref m_carGenerator.m_MinZ, ref m_carGenerator.m_MaxZ, 2, 8);
+
+        EditorGUILayout.BeginHorizontal();
+        m_carGenerator.m_WheelMinRadius = EditorGUILayout.FloatField(m_carGenerator.m_WheelMinRadius);
+        m_carGenerator.m_WheelMaxRadius = EditorGUILayout.FloatField(m_carGenerator.m_WheelMaxRadius);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.MinMaxSlider("Wheel radius range", ref m_carGenerator.m_WheelMinRadius, ref m_carGenerator.m_WheelMaxRadius, .2f, .8f);
 
         if (GUILayout.Button("Generate"))
         {
-            carGenerator.GenerateCar();
+            m_carGenerator.GenerateCar();
         }
         EditorGUILayout.EndVertical();
     }
 
-    //public void MakeRangeSlider(float min, float max, float leftMin, float leftMax, string label)
-    //{
-    //    EditorGUILayout.BeginHorizontal();
-    //    carGenerator.minZ = EditorGUILayout.FloatField(min);
-    //    carGenerator.maxZ = EditorGUILayout.FloatField(max);
-    //    EditorGUILayout.EndHorizontal();
-    //    EditorGUILayout.MinMaxSlider("Lower Width range", ref min, ref max, leftMin, leftMax);
-    //}
 }
